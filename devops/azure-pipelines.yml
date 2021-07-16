@@ -4,7 +4,62 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+  microservice: account-microservice
+  coveragePath: src/main/java/com/revature/registry
 
+steps:
+- checkout: self
+
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'SonarCloud'
+    organization: '1053-august-duet-project-registry'
+    scannerMode: 'Other'
+    extraProperties: |
+      # Additional properties that will be passed to the scanner, 
+      # Put one key=value per line, example:
+      # sonar.exclusions=**/*.bin
+      sonar.projectKey=1053-August-Duet-Project-Registry_project-registry-${{ variables.microservice }}
+      sonar.projectName=project-registry-${{ variables.microservice }}
+  displayName: Prepare Analysis for ${{ variables.microservice }} --> Task
+
+
+- task: 'Maven@3'
+  inputs:
+    mavenPomFile: ./pom.xml
+    publishJUnitresults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    codeCoverageToolOption: 'JaCoCo'
+    codeCoverageClassFilesDirectories: $(Agent.BuildDirectory)/${{ variables.coveragePath }}
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.11'
+    mavenVersionOption: 'Default'
+    mavenOptions: '-Xmx3072m'
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: true
+    sqMavenPluginVersionChoice: 'latest'
+  displayName: Build/Analyze ${{ variables.microservice }} --> Task
+
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
+  displayName: Publish Analysis of ${{ variables.microservice }} --> Task
+
+# - task: 'ado-discord-webhook@1'
+#   condition: always()
+#   inputs:
+#     channelId: '856587514218545203'
+#     webhookKey: 'OmVq23OAAKWh6VQGfoiFE-DRlGwtDst19OLHedR9HaQ7eONnVdlBJlc1i8OiAUpz4hqd'
+#     name: 'Team 1 Project 3 Pipeline'
+#     messageType: 'content'
+#     content: | 
+#           __*Team 2 P2*__  Analysis Report
+#           ``` Build Number = $(Build.BuildNumber)
+#           Report = https://sonarcloud.io/dashboard?branch=$(Build.SourceBranch)&id=1053-August-Duet-Project-Registry_project-registry-${{ variables.microservice }}
+#           Repo = $(Build.Repository.Name)
+#           Branch = $(Build.SourceBranch)
+#           Trigger = $(Build.Reason)
+#           Status = $(Agent.JobStatus)```
+#   displayName: Notification --> Task
