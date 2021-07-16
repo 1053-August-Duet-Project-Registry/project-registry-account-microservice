@@ -1,12 +1,12 @@
 trigger:
-- DevOps-Working
+- Dev
 
 pool:
   vmImage: ubuntu-latest
 
 variables:
   microservice: account-microservice
-  coveragePath: src/main/java/com/revature/registry
+  coveragePath: src/main/java/com/revature/registry/controller,model,repository,service
 
 steps:
 - checkout: self
