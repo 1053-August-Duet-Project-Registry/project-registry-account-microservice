@@ -55,11 +55,11 @@ steps:
 #     name: 'Team 1 Project 3 Pipeline'
 #     messageType: 'content'
 #     content: | 
-#           __*Team 2 P2*__  Analysis Report
+#           __*Project Registry ${{ variables.microservice }}*__  Analysis Report
 #           ``` Build Number = $(Build.BuildNumber)
 #           Report = https://sonarcloud.io/dashboard?branch=$(Build.SourceBranch)&id=1053-August-Duet-Project-Registry_project-registry-${{ variables.microservice }}
 #           Repo = $(Build.Repository.Name)
 #           Branch = $(Build.SourceBranch)
 #           Trigger = $(Build.Reason)
 #           Status = $(Agent.JobStatus)```
-#   displayName: Notification --> Task
+#   displayName: ${{ variables.microservice }} Notification --> Task
