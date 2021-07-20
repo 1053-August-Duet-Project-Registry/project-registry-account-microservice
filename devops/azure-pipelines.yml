@@ -1,3 +1,11 @@
+resources:
+  repositories:
+  - repository: templates
+    type: github
+    endpoint: Team1-Project3
+    name: 1053-August-Duet-Project-Registry/project-registry-devops
+    ref: refs/heads/feature-templates
+
 trigger:
 - branch-dev
 - main
@@ -11,16 +19,6 @@ pool:
 variables:
 - group: project-registry-sonarcloud
 - group: project-registry-discord
-- name: microservice
-  value: "account-microservice"
-- name: coveragePath
-  value: "src/main/java/com/revature/registry"
-- name: workDir
-  value: "./"
-- name: maven
-  value: true
-- name: angular
-  value: false
 
 stages:
 - stage: build
@@ -29,89 +27,11 @@ stages:
 
     steps:
     - checkout: self
-
-    - task: SonarCloudPrepare@1
-      enabled: ${{ variables.angular }}
-      inputs:
-        SonarCloud: 'SonarCloud'
-        organization: $(sonarOrg)
-        scannerMode: 'CLI'
-        configMode: 'manual'
-        cliProjectKey: $(sonarKeyPrefix)${{ variables.microservice }}
-        cliSources: './${{ variables.workDir }}'
-      displayName: Prepare Analysis for ${{ variables.microservice }} --> Task
-          
-    - task: Npm@1
-      enabled: ${{ variables.angular }}
-      inputs:
-        command: 'install'
-        workingDir: './${{ variables.workDir }}'
-      displayName: Install dependencies for ${{ variables.microservice }} --> Task
-
-    - task: AngularCLI@1
-      enabled: ${{ variables.angular }}
-      inputs:
-        command: 'build'
-        project: './${{ variables.workDir }}'
-        prod: false
-        DisableAnalytics: true
-      displayName: Build ${{ variables.microservice }} --> Task
-
-    - task: SonarCloudAnalyze@1
-      enabled: ${{ variables.angular }}
-      displayName: Analyze ${{ variables.microservice }} --> Task
-
-    - task: SonarCloudPrepare@1
-      enabled: ${{ variables.maven }}
-      inputs:
-        SonarCloud: 'SonarCloud'
-        organization: $(sonarOrg)
-        scannerMode: 'Other'
-        extraProperties: |
-          sonar.projectKey=$(sonarKeyPrefix)${{ variables.microservice }}
-          sonar.projectName=$(sonarNamePrefix)${{ variables.microservice }}
-      displayName: Prepare Analysis for ${{ variables.microservice }} --> Task
-
-    - task: 'Maven@3'
-      enabled: ${{ variables.maven }}
-      inputs:
-        mavenPomFile: ./pom.xml
-        publishJUnitresults: true
-        testResultsFiles: '**/surefire-reports/TEST-*.xml'
-        codeCoverageToolOption: 'JaCoCo'
-        codeCoverageClassFilesDirectories: $(Agent.BuildDirectory)/${{ variables.coveragePath }}
-        javaHomeOption: 'JDKVersion'
-        jdkVersionOption: '1.11'
-        mavenVersionOption: 'Default'
-        mavenOptions: '-Xmx3072m'
-        mavenAuthenticateFeed: false
-        effectivePomSkip: false
-        sonarQubeRunAnalysis: true
-        sqMavenPluginVersionChoice: 'latest'
-      displayName: Build/Analyze ${{ variables.microservice }} --> Task
-
-    - task: SonarCloudPublish@1
-      condition: always()
-      inputs:
-        pollingTimeoutSec: '300'
-      displayName: Publish Analysis of ${{ variables.microservice }} --> Task
-
-    - task: 'ado-discord-webhook@1'
-      condition: always()
-      inputs:
-        channelId: $(discordAnalysisChannel)
-        webhookKey: $(discordAnalysisKey)
-        name: ${{ variables.notifactionDisplayName }}
-        messageType: 'content'
-        content: | 
-              **__Analysis Report__**
-              **Build Number:** $(Build.BuildNumber)
-              **Report:** $(sonarUrlPrefix)$(Build.SourceBranch)&id=$(sonarKeyPrefix)${{ variables.microservice }}
-              **Repo:** $(Build.Repository.Name)
-              **Branch:** $(Build.SourceBranch)
-              **Trigger:** $(Build.Reason)
-              **Status:** $(Agent.JobStatus)
-      displayName: Notification --> Task
+    - checkout: templates
+    - template: ./templates/analysis.yml@templates
+      parameters:
+        microservice: account-microservice
+        workDir: ./project-registry-account-microservice/
 
     displayName: Analyze --> Job
 
