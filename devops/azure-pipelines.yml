@@ -1,3 +1,5 @@
+# This pipeline relies on the analysis.yml template located in the
+# repository resource descibed below
 resources:
   repositories:
   - repository: templates
@@ -6,6 +8,10 @@ resources:
     name: 1053-August-Duet-Project-Registry/project-registry-devops
     ref: refs/heads/feature-templates
 
+# This pipeline will trigger on commits or pull-requests made to the branch-dev
+# or main branches.  Note that static analysis with SonarCloud is only performed
+# on "long-lived" branches, which are designated as 'main' and any branch name
+# prefixed with 'branch-'.
 trigger:
 - branch-dev
 - main
@@ -16,6 +22,8 @@ pr:
 pool:
   vmImage: ubuntu-latest
 
+# These variable groups are required for sonarCloud and Discord secrets to be
+# available in the analysis template
 variables:
 - group: project-registry-sonarcloud
 - group: project-registry-discord
@@ -34,5 +42,7 @@ stages:
         workDir: ./project-registry-account-microservice/
 
     displayName: Analyze --> Job
+
+    # Dockerize job goes here
 
   displayName: Build --> Stage
