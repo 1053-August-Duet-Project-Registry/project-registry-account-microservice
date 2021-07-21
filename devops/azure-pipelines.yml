@@ -40,7 +40,6 @@ variables:
 - group: project-registry-sonarcloud
 - group: project-registry-discord
 
-
 stages:
 - stage: build
   jobs:
