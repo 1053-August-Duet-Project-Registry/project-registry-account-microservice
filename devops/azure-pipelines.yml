@@ -52,6 +52,7 @@ stages:
       parameters:
         microservice: account-microservice
         workDir: ./project-registry-account-microservice/
+        coveragePath: src/main/java/com/revature/registry/controller/,src/main/java/com/revature/registry/model/,src/main/java/com/revature/registry/repository/,src/main/java/com/revature/registry/service/
         sonarKeyPrefix: $(sonarKeyPrefix)
         sonarNamePrefix: $(sonarNamePrefix)
         sonarOrg: $(sonarOrg)
