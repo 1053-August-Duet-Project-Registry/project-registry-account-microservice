@@ -9,11 +9,11 @@ resources:
     name: 1053-August-Duet-Project-Registry/project-registry-devops
     ref: refs/heads/feature-templates
 
-# This pipeline will trigger on commits or pull-requests made to the branch-dev
-# or main branches.  Note that full static analysis with SonarCloud is only 
-# performed on "long-lived" branches, which are designated as 'main' and any 
-# branch name prefixed with 'branch-'.  Minimal analysis is still performed on
-# "short-lived" branches and special analyisis is performed on pull-requests
+# This pipeline will trigger on commits or pull-requests made to the branch-dev 
+# or main branches.  Note that complete static analysis with SonarCloud is only 
+# performed on "long-lived" branches, designated as 'main' and any branch name 
+# prefixed with 'branch-'.  A minimal analysis is still performed on "short-lived" 
+# branches, and a special analysis is performed on pull requests.
 trigger:
 - branch-dev
 - main
