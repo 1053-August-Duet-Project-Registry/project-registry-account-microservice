@@ -40,6 +40,7 @@ variables:
 - group: project-registry-sonarcloud
 - group: project-registry-discord
 
+
 stages:
 - stage: build
   jobs:
@@ -48,7 +49,7 @@ stages:
     steps:
     - checkout: self
     - checkout: templates
-    
+
     - template: ./templates/analysis.yml@templates
       parameters:
         microservice: account-microservice
