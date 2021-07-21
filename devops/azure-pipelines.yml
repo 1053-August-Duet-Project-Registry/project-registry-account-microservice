@@ -1,0 +1,68 @@
+# This pipeline relies on the analysis.yml template located in the
+# repository resource descibed below
+# The ref: value must point to a branch where the template exists.
+resources:
+  repositories:
+  - repository: templates
+    type: github
+    endpoint: Team1-Project3
+    name: 1053-August-Duet-Project-Registry/project-registry-devops
+    ref: refs/heads/branch-dev
+
+# This pipeline will trigger on commits or pull-requests made to the branch-dev 
+# or main branches.  Note that complete static analysis with SonarCloud is only 
+# performed on "long-lived" branches, designated as 'main' and any branch name 
+# prefixed with 'branch-'.  A minimal analysis is still performed on "short-lived" 
+# branches, and a special analysis is performed on pull requests.
+trigger:
+- branch-dev
+- main
+pr:
+- branch-dev
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+# These variable groups are required for sonarCloud and Discord secrets to be
+# available in the analysis template
+# The contents of these groups that are used here are:
+#  project-registry-sonarcloud: stores sonarcloud variables/secrets
+#   - sonarKeyPrefix: the common prefix string for the sonar keys in the project
+#       (requires a sonarCloud project key)
+#   - sonarNamePrefix: the common prefix string for the project names
+#   - sonarOrg: the sonar organization
+#   - sonarUrlPrefix: the common prefix string for the url for the results
+#  project-registry-discord: stores discord variables/secrets
+#   - discordAnalysisChannel: the output channel for discord analysis info
+#   - discordAnalysisKey: the webhook key associated with the above channel
+variables:
+- group: project-registry-sonarcloud
+- group: project-registry-discord
+
+stages:
+- stage: build
+  jobs:
+  - job: analyze
+
+    steps:
+    - checkout: self
+    - checkout: templates
+
+    - template: ./templates/analysis.yml@templates
+      parameters:
+        microservice: account-microservice
+        workDir: ./project-registry-account-microservice/
+        coveragePath: src/main/java/com/revature/registry/controller/,src/main/java/com/revature/registry/model/,src/main/java/com/revature/registry/repository/,src/main/java/com/revature/registry/service/
+        sonarKeyPrefix: $(sonarKeyPrefix)
+        sonarNamePrefix: $(sonarNamePrefix)
+        sonarOrg: $(sonarOrg)
+        sonarUrlPrefix: $(sonarUrlPrefix)
+        discordChannel: $(discordAnalysisChannel)
+        discordKey: $(discordAnalysisKey)
+        
+    displayName: Analyze --> Job
+
+    # Dockerize job goes here
+
+  displayName: Build --> Stage
