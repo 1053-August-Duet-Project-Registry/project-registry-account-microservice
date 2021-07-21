@@ -50,10 +50,10 @@ stages:
 
     - script: echo $(Build.Repository.Name)
 
-    - template: ./templates/analysis.yml@templates
-      parameters:
-        microservice: account-microservice
-        workDir: ./project-registry-account-microservice/
+    # - template: ./templates/analysis.yml@templates
+    #   parameters:
+    #     microservice: account-microservice
+    #     workDir: ./project-registry-account-microservice/
 
     displayName: Analyze --> Job
 
