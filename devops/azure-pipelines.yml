@@ -48,7 +48,7 @@ stages:
     steps:
     - checkout: self
     - checkout: templates
-    
+     
     - template: ./templates/analysis.yml@templates
       parameters:
         microservice: account-microservice
