@@ -56,7 +56,7 @@ stages:
         sonarOrg: $(sonarOrg)
         sonarUrlPrefix: $(sonarUrlPrefix)
         discordChannel: $(discordAnalysisChannel)
-        discordKey: $(discordAnalysisChannel)
+        discordKey: $(discordAnalysisKey)
         
     displayName: Analyze --> Job
 
