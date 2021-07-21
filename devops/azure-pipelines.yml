@@ -24,6 +24,17 @@ pool:
 
 # These variable groups are required for sonarCloud and Discord secrets to be
 # available in the analysis template
+# The contents of these groups that are used here are:
+#  project-registry-sonarcloud: stores sonarcloud variables/secrets
+#   - sonarKeyPrefix: the common prefix string for the sonar keys in the project
+#       (requires a sonarCloud project key)
+#   - sonarNamePrefix: the common prefix string for the project names
+#   - sonarOrg: the sonar organization
+#   - sonarUrlPrefix: the common prefix string for the url for the results
+#  project-registry-discord: stores discord variables/secrets
+#   - discordAnalysisChannel: the output channel for discord analysis info
+#   - discordAnalysisKey: the webhook key associated with the above channel
+
 variables:
 - group: project-registry-sonarcloud
 - group: project-registry-discord
