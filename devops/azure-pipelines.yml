@@ -34,7 +34,6 @@ pool:
 #  project-registry-discord: stores discord variables/secrets
 #   - discordAnalysisChannel: the output channel for discord analysis info
 #   - discordAnalysisKey: the webhook key associated with the above channel
-
 variables:
 - group: project-registry-sonarcloud
 - group: project-registry-discord
@@ -52,7 +51,13 @@ stages:
       parameters:
         microservice: account-microservice
         workDir: ./project-registry-account-microservice/
-
+        sonarKeyPrefix: $(sonarKeyPrefix)
+        sonarNamePrefix: $(sonarNamePrefix)
+        sonarOrg: $(sonarOrg)
+        sonarUrlPrefix: $(sonarUrlPrefix)
+        discordChannel: $(discordAnalysisChannel)
+        discordKey: $(discordAnalysisChannel)
+        
     displayName: Analyze --> Job
 
     # Dockerize job goes here
