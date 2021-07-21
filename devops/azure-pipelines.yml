@@ -47,6 +47,9 @@ stages:
     steps:
     - checkout: self
     - checkout: templates
+
+    - script: echo $(Build.Repository.Name)
+
     - template: ./templates/analysis.yml@templates
       parameters:
         microservice: account-microservice
