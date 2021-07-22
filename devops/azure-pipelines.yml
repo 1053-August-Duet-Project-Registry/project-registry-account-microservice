@@ -41,7 +41,7 @@ variables:
 - group: project-registry-discord
 
 stages:
-- stage: build
+- stage: analyze
   jobs:
   - job: analyze
 
@@ -63,6 +63,23 @@ stages:
         
     displayName: Analyze --> Job
 
-    # Dockerize job goes here
+  displayName: Analyze --> Stage
 
-  displayName: Build --> Stage
+- stage: dockerize
+  dependsOn: [] # <-- run concurrent with analyze stage; does not depend on it
+  jobs:
+
+  - job: dockerize
+    steps:
+    - template: ./templates/dockerize.yml@templates
+      parameters:
+        imageName: project-registry-account-microservice
+        containerRepo: jpbulloch5
+        containerServiceConnection: 'Jacob''s Docker Hub'
+        containerUrl: https://hub.docker.com/repository/docker/jpbulloch5/project-registry-gateway
+        discordChannel: $(discordDockerChannel)
+        discordKey: $(discordDockerKey)
+        
+    displayName: Dockerize --> Job
+
+  displayName: Dockerize --> Stage
