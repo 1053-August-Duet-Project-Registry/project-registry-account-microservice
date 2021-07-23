@@ -47,7 +47,7 @@ stages:
   - job: analyze
 
     steps:
-    - template: ./templates/analysis.yml@templates
+    - template: ./templates/analysis.mvn.yml@templates
       parameters:
         microservice: account-microservice
         workDir: ./
@@ -70,7 +70,7 @@ stages:
   - job: dockerize
   
     steps:
-    - template: ./templates/dockerize.yml@templates
+    - template: ./templates/dockerize.mvn.yml@templates
       parameters:
         imageName: project-registry-account-microservice
         containerRepo: jpbulloch5
