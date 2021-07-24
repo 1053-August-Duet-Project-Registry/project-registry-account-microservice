@@ -7,7 +7,7 @@ resources:
     type: github
     endpoint: Team1-Project3
     name: 1053-August-Duet-Project-Registry/project-registry-devops
-    ref: refs/heads/feature-dockerpipe
+    ref: refs/heads/feature-template-update
 
 # This pipeline will trigger on commits or pull-requests made to the branch-dev 
 # or main branches.  Note that complete static analysis with SonarCloud is only 
@@ -56,8 +56,8 @@ stages:
         sonarNamePrefix: $(sonarNamePrefix)
         sonarOrg: $(sonarOrg)
         sonarUrlPrefix: $(sonarUrlPrefix)
-        discordChannel: $(discordAnalysisChannel)
-        discordKey: $(discordAnalysisKey)
+        discordChannel: $(discordAccountChannel)
+        discordKey: $(discordAccountKey)
         
     displayName: Analyze --> Job
 
@@ -73,11 +73,10 @@ stages:
     - template: ./templates/dockerize.mvn.yml@templates
       parameters:
         imageName: project-registry-account-microservice
-        containerRepo: jpbulloch5
-        containerServiceConnection: 'Jacob''s Docker Hub'
-        containerUrl: https://hub.docker.com/repository/docker/jpbulloch5/project-registry-account-microservice
-        discordChannel: $(discordDockerChannel)
-        discordKey: $(discordDockerKey)
+        containerRepo: 'May24DevOpsContainers'
+        containerServiceConnection: 'acr-team1'
+        discordChannel: $(discordAccountChannel)
+        discordKey: $(discordAccountKey)
         
     displayName: Dockerize --> Job
 
