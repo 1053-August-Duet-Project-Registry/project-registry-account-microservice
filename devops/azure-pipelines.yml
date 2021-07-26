@@ -7,7 +7,7 @@ resources:
     type: github
     endpoint: Team1-Project3
     name: 1053-August-Duet-Project-Registry/project-registry-devops
-    ref: refs/heads/branch-dev
+    ref: refs/heads/feature-template-update
 
 # This pipeline will trigger on commits or pull-requests made to the branch-dev 
 # or main branches.  Note that complete static analysis with SonarCloud is only 
@@ -41,28 +41,43 @@ variables:
 - group: project-registry-discord
 
 stages:
-- stage: build
+- stage: analyze
   jobs:
+
   - job: analyze
 
     steps:
-    - checkout: self
-    - checkout: templates
-
-    - template: ./templates/analysis.yml@templates
+    - template: ./templates/analysis.mvn.yml@templates
       parameters:
         microservice: account-microservice
-        workDir: ./project-registry-account-microservice/
+        workDir: ./
         coveragePath: src/main/java/com/revature/registry/controller/,src/main/java/com/revature/registry/model/,src/main/java/com/revature/registry/repository/,src/main/java/com/revature/registry/service/
         sonarKeyPrefix: $(sonarKeyPrefix)
         sonarNamePrefix: $(sonarNamePrefix)
         sonarOrg: $(sonarOrg)
         sonarUrlPrefix: $(sonarUrlPrefix)
-        discordChannel: $(discordAnalysisChannel)
-        discordKey: $(discordAnalysisKey)
+        discordChannel: $(discordAccountChannel)
+        discordKey: $(discordAccountKey)
         
     displayName: Analyze --> Job
 
-    # Dockerize job goes here
+  displayName: Analyze --> Stage
 
-  displayName: Build --> Stage
+- stage: dockerize
+  dependsOn: [] # <-- run concurrent with analyze stage; does not depend on it
+  jobs:
+
+  - job: dockerize
+  
+    steps:
+    - template: ./templates/dockerize.mvn.yml@templates
+      parameters:
+        imageName: project-registry-account-microservice
+        containerRepo: 'May24DevOpsContainers'
+        containerServiceConnection: 'acr-team1'
+        discordChannel: $(discordAccountChannel)
+        discordKey: $(discordAccountKey)
+        
+    displayName: Dockerize --> Job
+
+  displayName: Dockerize --> Stage
