@@ -8,7 +8,7 @@ resources:
     type: github
     endpoint: Team1-Project3
     name: 1053-August-Duet-Project-Registry/project-registry-devops
-    ref: refs/heads/feature-deploy
+    ref: refs/heads/branch-dev
 
 # This pipeline will trigger on commits or pull-requests made to the branch-dev 
 # or main branches.  Note that complete static analysis with SonarCloud is only 
