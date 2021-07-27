@@ -99,9 +99,9 @@ stages:
         containerRegistry: 'acr-team1'
         cluster: 'k8s-team1-config-dev'
         namespace: 'team1'
-        manifest: 'k8s/microservices/project.yml'
-        discordChannel: $(discordProjectChannel)
-        discordKey: $(discordProjectKey)
+        manifest: 'k8s/microservices/account.yml'
+        discordChannel: $(discordAccountChannel)
+        discordKey: $(discordAccountKey)
 
     displayName: Deploy to Dev Cluster --> Job
 
@@ -115,9 +115,9 @@ stages:
         containerRegistry: 'acr-team1'
         cluster: 'k8s-team1-config-staging'
         namespace: 'team1'
-        manifest: 'k8s/microservices/project.yml'
-        discordChannel: $(discordProjectChannel)
-        discordKey: $(discordProjectKey)
+        manifest: 'k8s/microservices/account.yml'
+        discordChannel: $(discordAccountChannel)
+        discordKey: $(discordAccountKey)
 
     displayName: Deploy to Staging Cluster --> Job
   displayName: Deploy --> Stage
