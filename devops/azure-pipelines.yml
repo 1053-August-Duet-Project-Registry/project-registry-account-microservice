@@ -8,7 +8,7 @@ resources:
     type: github
     endpoint: Team1-Project3
     name: 1053-August-Duet-Project-Registry/project-registry-devops
-    ref: refs/heads/branch-dev
+    ref: refs/heads/feature-deploy
 
 # This pipeline will trigger on commits or pull-requests made to the branch-dev 
 # or main branches.  Note that complete static analysis with SonarCloud is only 
@@ -89,22 +89,35 @@ stages:
   - dockerize
   jobs:
 
-  - job: deploy
-  
+  - job: deployDev
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/branch-dev')
     steps:
     - checkout: templates
 
     - template: ./templates/deploy.yml@templates
       parameters:
         containerRegistry: 'acr-team1'
-        devCluster: 'k8s-team1-config-dev'
-        stagingCluster: 'k8s-team1-config-staging'
-        devBranch: 'branch-dev'
-        stagingBranch: 'main'
+        cluster: 'k8s-team1-config-dev'
         namespace: 'team1'
-        manifest: 'k8s/microservices/account.yml'
-        discordChannel: $(discordAccountChannel)
-        discordKey: $(discordAccountKey)
+        manifest: 'k8s/microservices/project.yml'
+        discordChannel: $(discordProjectChannel)
+        discordKey: $(discordProjectKey)
 
-    displayName: Deploy --> Job
+    displayName: Deploy to Dev Cluster --> Job
+
+  - job: deployStaging
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+    steps:
+    - checkout: templates
+
+    - template: ./templates/deploy.yml@templates
+      parameters:
+        containerRegistry: 'acr-team1'
+        cluster: 'k8s-team1-config-staging'
+        namespace: 'team1'
+        manifest: 'k8s/microservices/project.yml'
+        discordChannel: $(discordProjectChannel)
+        discordKey: $(discordProjectKey)
+
+    displayName: Deploy to Staging Cluster --> Job
   displayName: Deploy --> Stage
