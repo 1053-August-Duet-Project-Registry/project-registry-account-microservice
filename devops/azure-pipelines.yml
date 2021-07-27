@@ -84,6 +84,9 @@ stages:
   displayName: Dockerize --> Stage
 
 - stage: deploy
+  # skip deployment on pull requests.  When the pull request is approved, the
+  # resulting commit will trigger the pull request
+  condition: ne(variables['Build.Reason'],'PullRequest')
   dependsOn:
   - analyze
   - dockerize
