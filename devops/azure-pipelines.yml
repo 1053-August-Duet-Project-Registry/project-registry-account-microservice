@@ -1,0 +1,135 @@
+# This pipeline relies on the analysis.mvn.yml and dockerize.mvn.yml templates 
+# located in the repository resource descibed below.  Note that these are
+# distinct from analysis.ng.yml and dockerize.ng.yml, which are for angular builds.
+# The ref: value must point to a branch where the template exists.
+resources:
+  repositories:
+  - repository: templates
+    type: github
+    endpoint: Team1-Project3
+    name: 1053-August-Duet-Project-Registry/project-registry-devops
+    ref: refs/heads/main
+
+# This pipeline will trigger on commits or pull-requests made to the branch-dev 
+# or main branches.  Note that complete static analysis with SonarCloud is only 
+# performed on "long-lived" branches, designated as 'main' and any branch name 
+# prefixed with 'branch-'.  A minimal analysis is still performed on "short-lived" 
+# branches, and a special analysis is performed on pull requests.
+trigger:
+- branch-dev
+- main
+pr:
+- branch-dev
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+# These variable groups are required for sonarCloud and Discord secrets to be
+# available in the analysis template
+# The contents of these groups that are used here are:
+#  project-registry-sonarcloud: stores sonarcloud variables/secrets
+#   - sonarKeyPrefix: the common prefix string for the sonar keys in the project
+#       (requires a sonarCloud project key)
+#   - sonarNamePrefix: the common prefix string for the project names
+#   - sonarOrg: the sonar organization
+#   - sonarUrlPrefix: the common prefix string for the url for the results
+#  project-registry-discord: stores discord variables/secrets
+#   - discordAnalysisChannel: the output channel for discord analysis info
+#   - discordAnalysisKey: the webhook key associated with the above channel
+variables:
+- group: project-registry-sonarcloud
+- group: project-registry-discord
+
+stages:
+- stage: analyze
+  jobs:
+
+  - job: analyze
+
+    steps:
+    - template: ./templates/analysis.mvn.yml@templates
+      parameters:
+        microservice: account-microservice
+        workDir: ./
+        coveragePath: src/main/java/com/revature/registry/controller/,src/main/java/com/revature/registry/model/,src/main/java/com/revature/registry/repository/,src/main/java/com/revature/registry/service/
+        sonarKeyPrefix: $(sonarKeyPrefix)
+        sonarNamePrefix: $(sonarNamePrefix)
+        sonarOrg: $(sonarOrg)
+        sonarUrlPrefix: $(sonarUrlPrefix)
+        discordChannel: $(discordAccountChannel)
+        discordKey: $(discordAccountKey)
+        
+    displayName: Analyze --> Job
+
+  displayName: Analyze --> Stage
+
+- stage: dockerize
+  dependsOn: [] # <-- run concurrent with analyze stage; does not depend on it
+  jobs:
+
+  - job: dockerize
+  
+    steps:
+    - template: ./templates/dockerize.mvn.yml@templates
+      parameters:
+        imageName: project-registry-account-microservice
+        containerRepo: 'May24DevOpsContainers'
+        containerServiceConnection: 'acr-team1'
+        discordChannel: $(discordAccountChannel)
+        discordKey: $(discordAccountKey)
+        
+    displayName: Dockerize --> Job
+
+  displayName: Dockerize --> Stage
+
+- stage: deploy
+  # skip deployment on pull requests.  When the pull request is approved, the
+  # resulting commit will trigger the pull request
+  condition: and(succeeded(),ne(variables['Build.Reason'],'PullRequest'))
+  dependsOn:
+  - analyze
+  - dockerize
+  jobs:
+
+  - deployment: deployDev
+    condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/branch-dev'))
+    environment: dev
+    strategy:
+     runOnce:
+       deploy:
+        steps:
+        - checkout: templates
+
+        - template: ./templates/deploy.yml@templates
+          parameters:
+            containerRegistry: 'acr-team1'
+            cluster: 'k8s-team1-config-dev'
+            namespace: 'team1'
+            manifest: 'k8s/microservices/account.yml'
+            discordChannel: $(discordAccountChannel)
+            discordKey: $(discordAccountKey)
+
+    displayName: Dev Cluster --> Deployment
+
+  - deployment: deployStaging
+    condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    environment: staging
+    strategy:
+     runOnce:
+       deploy:
+        steps:
+        - checkout: templates
+
+        - template: ./templates/deploy.yml@templates
+          parameters:
+            containerRegistry: 'acr-team1'
+            cluster: 'k8s-team1-config-staging'
+            namespace: 'team1'
+            manifest: 'k8s/microservices/account.yml'
+            discordChannel: $(discordAccountChannel)
+            discordKey: $(discordAccountKey)
+
+    displayName: Staging Cluster --> Deployment
+
+  displayName: Deploy --> Stage
