@@ -1,5 +1,6 @@
 package com.revature.registry.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -11,15 +12,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  * A {@link Project} is one of the Capstone Projects managed by the Center of Excellence. A {@link Project} is composed
@@ -48,17 +47,13 @@ public class Project {
     @ManyToOne
     @JoinColumn(name = "owner")
     private Account owner;
-    
-    @ManyToOne
-    @JoinColumn(name = "phase")
-    private Phase phase;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "project_tags_jt", joinColumns = { @JoinColumn(name = "project_id") }, inverseJoinColumns = {
             @JoinColumn(name = "tag_id") })
-    private List<Tag> tags;
-    
+    private List<Tag> tags = new ArrayList<>();
 
-
+    @OneToMany(mappedBy = "project")
+    @JsonIgnoreProperties("project")
+    private List<Iteration> iterations = new ArrayList<>();
 }
