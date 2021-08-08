@@ -24,17 +24,20 @@ insert into phase (kind, description) values ('CHECKPOINT_MEETING', 'Progress me
 insert into phase (kind, description) values ('CODE_REVIEW', 'Code Review of work completed in Iteration has commenced');
 insert into phase (kind, description) values ('COMPLETE', 'Iteration has completed, ready to merge into upstream');
 -- insert tags
-insert into tag (name, description) values ('Angular', 'This project used an Angular Frontend');
-insert into tag (name, description) values ('React', 'This project used a React Frontend');
-insert into tag (name, description) values ('JDBC', 'Uses JDBC to connect to the DB');
-insert into tag (name, description) values ('AWS RDS', 'This project used AWS RDS for the database');
-insert into tag (name, description) values ('REST', 'This project is a RESTful service');
-insert into tag (name, description) values ('SpringMVC', 'This project used MVC for servlets');
-insert into tag (name, description) values ('SPRING ORM', 'This project used Spring ORM for tables');
-insert into tag (name, description) values ('GIT', 'This project used a GIT REPO');
+insert into tag (name, description, is_enabled) values ('Angular', 'This project used an Angular Frontend', 1);
+insert into tag (name, description, is_enabled) values ('React', 'This project used a React Frontend',1);
+insert into tag (name, description, is_enabled) values ('JDBC', 'Uses JDBC to connect to the DB',1);
+insert into tag (name, description, is_enabled) values ('AWS RDS', 'This project used AWS RDS for the database',1);
+insert into tag (name, description, is_enabled) values ('REST', 'This project is a RESTful service',1);
+insert into tag (name, description, is_enabled) values ('SpringMVC', 'This project used MVC for servlets',1);
+insert into tag (name, description, is_enabled) values ('SPRING ORM', 'This project used Spring ORM for tables',1);
+insert into tag (name, description, is_enabled) values ('GIT', 'This project used a GIT REPO',1);
 -- insert projects
-insert into project(description, name, owner, status, phase) values('rideforce project', 'rideforce', 3, 3, 2);
-insert into project(description, name, owner, status, phase) values('Finds potential condadites by scrapping facebook.', 'Make A Recruiting Application', 1, 2, 3);
-insert into project(description, name, owner, status, phase) values('Allows for staging to be remote', 'Caliber Staging Module', 4, 3, 2);
--- insert organizations
-insert into organization(name, project_id) values ('test organziation', 1);
+insert into project(description, name, owner, status) values('rideforce project', 'rideforce', 3, 3);
+insert into project(description, name, owner, status) values('Finds potential condadites by scrapping facebook.', 'Make A Recruiting Application', 1, 2);
+insert into project(description, name, owner, status) values('Allows for staging to be remote', 'Caliber Staging Module', 4, 3);
+
+-- insert iterations
+
+insert into iteration (start_date, end_date, batch_id, project_id , phase) values ('2021-05-27', '2021-08-13','abc',1, 2);
+insert into iteration (start_date, end_date, batch_id, project_id, phase) values ('2021-06-01', '2021-09-05','def',2, 4);
