@@ -26,7 +26,7 @@ public class AccountController {
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<Account> getAllAccounts(@PathVariable("id") int id) {
+    public ResponseEntity<Account> getAccountByID(@PathVariable("id") int id) {
         Account account = accountService.getAccountByID(id);
         if (account != null) {
             return new ResponseEntity<>(account, HttpStatus.OK);
