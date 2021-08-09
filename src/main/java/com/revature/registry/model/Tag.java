@@ -26,4 +26,5 @@ public class Tag {
 
     @Column(name = "is_enabled")
     private Boolean isEnabled;
+
 }

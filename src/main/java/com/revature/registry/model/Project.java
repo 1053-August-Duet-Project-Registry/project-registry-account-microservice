@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 /**
  * A {@link Project} is one of the Capstone Projects managed by the Center of Excellence. A {@link Project} is composed
@@ -52,6 +52,7 @@ public class Project {
     @JoinTable(name = "project_tags_jt", joinColumns = { @JoinColumn(name = "project_id") }, inverseJoinColumns = {
             @JoinColumn(name = "tag_id") })
     private List<Tag> tags = new ArrayList<>();
+
 
     @OneToMany(mappedBy = "project")
     @JsonIgnoreProperties("project")

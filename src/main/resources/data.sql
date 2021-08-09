@@ -38,6 +38,7 @@ insert into tag (name, description, is_enabled) values ('GIT', 'This project use
 insert into project(description, name, owner, status) values('rideforce project', 'rideforce', 3, 3);
 insert into project(description, name, owner, status) values('Finds potential condadites by scrapping facebook.', 'Make A Recruiting Application', 1, 2);
 insert into project(description, name, owner, status) values('Allows for staging to be remote', 'Caliber Staging Module', 4, 3);
+
 -- insert tags to projects
 insert into project_tags_jt(project_id, tag_id) values(1, 1);
 insert into project_tags_jt(project_id, tag_id) values(1, 2);
