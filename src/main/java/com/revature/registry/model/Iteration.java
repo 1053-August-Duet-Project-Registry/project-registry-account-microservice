@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,10 +44,12 @@ public class Iteration {
 
     @ManyToOne
     @JoinColumn(name = "project_id")
+    @JsonIgnoreProperties("iterations")
     private Project project;
 
     @ManyToOne
     @JoinColumn(name = "phase")
+    @JsonIgnoreProperties("iterations")
     private Phase phase;
 
 

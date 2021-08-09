@@ -8,8 +8,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * A {@link Repository} refers to a Github Repository belonging to an {@link Organization}.
