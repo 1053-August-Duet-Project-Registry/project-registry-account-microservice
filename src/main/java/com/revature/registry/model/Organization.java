@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
 
 /**
@@ -36,5 +38,6 @@ public class Organization {
     private Project project;
 
     @OneToMany(mappedBy = "organization")
-    private List<Repository> repositories = new ArrayList<>(0);
+    @JsonIgnoreProperties("organization")
+    private List<Repository> repositories = new ArrayList<>();
 }

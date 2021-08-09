@@ -39,7 +39,15 @@ insert into project(description, name, owner, status) values('rideforce project'
 insert into project(description, name, owner, status) values('Finds potential condadites by scrapping facebook.', 'Make A Recruiting Application', 1, 2);
 insert into project(description, name, owner, status) values('Allows for staging to be remote', 'Caliber Staging Module', 4, 3);
 
+-- insert tags to projects
+insert into project_tags_jt(project_id, tag_id) values(1, 1);
+insert into project_tags_jt(project_id, tag_id) values(1, 2);
+insert into project_tags_jt(project_id, tag_id) values(1, 3);
 -- insert iterations
-
-insert into iteration (start_date, end_date, batch_id, project_id , phase) values ('2021-05-27', '2021-08-13','abc',1, 2);
+insert into iteration (start_date, end_date, batch_id, project_id, phase) values ('2021-05-27', '2021-08-13','abc',1, 2);
 insert into iteration (start_date, end_date, batch_id, project_id, phase) values ('2021-06-01', '2021-09-05','def',2, 4);
+-- insert organizations
+insert into organization(name, project_id) values ('test organziation', 1);
+-- insert repositories
+insert into repository(name, url, organization_id) values ('repo_01', 'https://github.com/repo_01', 1);
+insert into repository(name, url, organization_id) values ('repo_02', 'https://github.com/repo_02', 1);
