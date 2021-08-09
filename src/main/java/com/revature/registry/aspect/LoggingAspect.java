@@ -31,10 +31,10 @@ public class LoggingAspect {
         if (retVal == null) {
             LOG.warn(jp.getSignature() + "(" + args + ")" + " returns null");
         } else {
-            Object ret = retVal instanceof Boolean && Boolean.FALSE.equals(retVal) ? "false" : retVal;
             try {
-                LOG.info(jp.getSignature() + "(" + args + ")" + ": " + "returns "
-                        + new ObjectMapper().writeValueAsString(ret));
+                Object ret = retVal instanceof Boolean && Boolean.FALSE.equals(retVal) ? "false"
+                        : new ObjectMapper().writeValueAsString(retVal);
+                LOG.info(jp.getSignature() + "(" + args + ")" + ": " + "returns " + ret);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
