@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @SpringBootTest(classes = AccountMicroServiceApplication.class)
-public class AccountControllerTest {
+class AccountControllerTest {
 
     private MockMvc mockMvc;
 

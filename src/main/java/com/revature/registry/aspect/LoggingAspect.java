@@ -36,7 +36,7 @@ public class LoggingAspect {
                         : new ObjectMapper().writeValueAsString(retVal);
                 LOG.info(jp.getSignature() + "(" + args + ")" + ": " + "returns " + ret);
             } catch (JsonProcessingException e) {
-                e.printStackTrace();
+                //
             }
         }
     }
