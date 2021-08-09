@@ -15,6 +15,8 @@ insert into status(name) values ('READY_FOR_ITERATION');
 insert into status(name) values ('ACTIVE');
 insert into status(name) values ('NEEDS_ATTENTION');
 insert into status(name) values ('ARCHIVED');
+insert into status(name) values ('PLANNED');
+insert into status(name) values ('AVAILABLE');
 -- insert phase
 insert into phase (kind, description) values ('BACKLOG_GENERATED', 'CoE has completed the iterations backlog, awaiting trainer approval');
 insert into phase (kind, description) values ('TRAINER_APPROVED', 'Trainer has reviewed backlog and approves of scope and domain');
