@@ -9,15 +9,18 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * An {@link Iteration} is a batch's iteration with a {@link Project}, bound by the startDate and endDate.
+ * An {@link Iteration} is a batch's iteration with a {@link Project}, bound by
+ * the startDate and endDate.
  *
- * No two {@link Iteration}'s on a {@link Project} should have intersecting startDate/endDate, as this is a violation
- * of business rules.
+ * No two {@link Iteration}'s on a {@link Project} should have intersecting
+ * startDate/endDate, as this is a violation of business rules.
  */
 @Data
 @AllArgsConstructor
@@ -29,8 +32,10 @@ public class Iteration {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
     private String batchId;
@@ -38,4 +43,10 @@ public class Iteration {
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
+
+    @ManyToOne
+    @JoinColumn(name = "phase")
+    private Phase phase;
+
+
 }
