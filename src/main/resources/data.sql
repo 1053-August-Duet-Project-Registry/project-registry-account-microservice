@@ -15,8 +15,9 @@ insert into status(name) values ('READY_FOR_ITERATION');
 insert into status(name) values ('ACTIVE');
 insert into status(name) values ('NEEDS_ATTENTION');
 insert into status(name) values ('ARCHIVED');
-insert into status(name) values ('PLANNED');
 insert into status(name) values ('AVAILABLE');
+insert into status(name) values ('PLANNED');
+
 -- insert phase
 insert into phase (kind, description) values ('BACKLOG_GENERATED', 'CoE has completed the iterations backlog, awaiting trainer approval');
 insert into phase (kind, description) values ('TRAINER_APPROVED', 'Trainer has reviewed backlog and approves of scope and domain');
@@ -38,14 +39,16 @@ insert into tag (name, description, is_enabled) values ('GIT', 'This project use
 insert into project(description, name, owner, status) values('rideforce project', 'rideforce', 3, 3);
 insert into project(description, name, owner, status) values('Finds potential condadites by scrapping facebook.', 'Make A Recruiting Application', 1, 2);
 insert into project(description, name, owner, status) values('Allows for staging to be remote', 'Caliber Staging Module', 4, 3);
-
 -- insert tags to projects
 insert into project_tags_jt(project_id, tag_id) values(1, 1);
 insert into project_tags_jt(project_id, tag_id) values(1, 2);
 insert into project_tags_jt(project_id, tag_id) values(1, 3);
 -- insert iterations
-insert into iteration (start_date, end_date, batch_id, project_id, phase) values ('2021-05-27', '2021-08-13','abc',1, 2);
-insert into iteration (start_date, end_date, batch_id, project_id, phase) values ('2021-06-01', '2021-09-05','def',2, 4);
+insert into iteration (start_date, end_date, batch_id, project_id, phase) values ('2021-08-09', '2021-09-13','TR-1201',1, 2);
+insert into iteration (start_date, end_date, batch_id, project_id, phase) values ('2021-08-10', '2021-09-15','TR-1072',1, 3);
+insert into iteration (start_date, end_date, batch_id, project_id, phase) values ('2021-08-11', '2021-09-16','TR-1140',2, 4);
+insert into iteration (start_date, end_date, batch_id, project_id, phase) values ('2021-08-12', '2021-09-17','TR-1021',2, 1);
+insert into iteration (start_date, end_date, batch_id, project_id, phase) values ('2021-08-12', '2021-09-17','TR-1067',2, 1);
 -- insert organizations
 insert into organization(name, project_id) values ('test organziation', 1);
 -- insert repositories
