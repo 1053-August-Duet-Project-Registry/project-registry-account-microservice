@@ -11,7 +11,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
 	</parent>
 	<groupId>com.revature</groupId>
 	<artifactId>project-registry-account-microservice</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>project-registry-account-microservice</name>
 	<description>Project Mircoservice for Backend Repository</description>
 
